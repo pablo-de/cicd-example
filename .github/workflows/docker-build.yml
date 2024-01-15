@@ -33,6 +33,7 @@ jobs:
           echo "La imagen ${{ env.IMAGE_NAME }} se subió correctamente a Docker Hub"
 
   update:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -61,3 +62,4 @@ jobs:
           git add .
           git commit -m "update tag ${{ env.IMAGE_NAME }}"
           git push origin git@github.com:pablo-de/cicd-example.git
+
