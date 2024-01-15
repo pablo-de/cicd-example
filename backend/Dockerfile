@@ -1,12 +1,14 @@
-FROM python:3.8
+# Use the official Python image as the base image
+FROM python:3.9-slim
 
-COPY . /src
+# Set the working directory to /app
+WORKDIR /pokemon-app
 
-COPY ./requirements.txt /src/requirements.txt
+# Copy the current directory contents into the container at /app
+COPY . /pokemon-app
 
-WORKDIR /src
+# Install any dependencies specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-
-RUN pip install -r requirements.txt
-
-CMD [ "python", "main.py"]
+# Specify the command to run on container start
+CMD ["python", "main.py"]
