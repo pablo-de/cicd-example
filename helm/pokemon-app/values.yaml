@@ -8,7 +8,7 @@ image:
   repository: pablode24/pokemon-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 
+  tag: pokemon-app_7536160131_014159841a92f96cf07d9e14fc520757cdfacb45
 
 imagePullSecrets: []
 nameOverride: ""
