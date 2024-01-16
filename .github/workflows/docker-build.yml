@@ -49,13 +49,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           git config user.name "${{ secrets.GIT_USER_NAME }}"
           git config user.email "${{ secrets.GIT_USER_EMAIL }}"
-          # git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
-          # git fetch
-          # git pull origin main
+
+      - name: Clone Repository
+        run: git clone --single-branch --branch main ${{ secrets.K8S_REPO }}
 
       - name: Update Manifest
         run: |
-          echo ${{ env.TAG_IMAGE }}
           cd helm/pokemon-app/
           sed -i "s/\(tag:\).*/\1 ${{ env.TAG_IMAGE }}/g" values.yaml
           cd ../..
