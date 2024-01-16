@@ -28,8 +28,8 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${TAG_IMAGE} -f ./backend/Dockerfile .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${TAG_IMAGE}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG_IMAGE }} -f ./backend/Dockerfile .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG_IMAGE }}
           echo "La imagen ${{ env.IMAGE_NAME }} se subió correctamente a Docker Hub"
 
   update:
@@ -54,9 +54,9 @@ jobs:
       - name: Update Manifest
         run: |
           cd helm/pokemon-app/
-          sed -i "s/\(tag:\s*\).*/\1${TAG_IMAGE}/" values.yaml
+          sed -i "s/\(tag:\s*\).*/\1${{ env.TAG_IMAGE }}/g" values.yaml
           cat values.yaml
           cd ../..
           git add helm/pokemon-app/values.yaml
-          git commit -m "Update tag to ${TAG_IMAGE}"
+          git commit -m "Update tag to ${{ env.TAG_IMAGE }}"
           git push origin main
