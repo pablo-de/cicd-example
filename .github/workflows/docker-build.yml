@@ -59,6 +59,6 @@ jobs:
           cd helm/pokemon-app/
           sed -i "s/\(tag:\).*/\1 ${{ env.TAG_IMAGE }}/g" values.yaml
           cd ../..
-          git .
+          git add .
           git commit -m "Update tag to ${{ env.TAG_IMAGE }}"
           git push origin main
