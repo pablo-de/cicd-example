@@ -23,14 +23,16 @@ jobs:
           TAG_IMAGE=${{ env.IMAGE_NAME }}_${{ github.run_id }}_${{ github.sha }}
           echo "TAG_IMAGE=${TAG_IMAGE}" >> $GITHUB_ENV
           echo "TAG_IMAGE: ${TAG_IMAGE}" 
+          echo "${TAG_IMAGE}" > tag_image.txt
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and Push Docker Images
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG_IMAGE }} -f ./backend/Dockerfile .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.TAG_IMAGE }}
+          TAG_IMAGE=$(cat tag_image.txt)
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${TAG_IMAGE} -f ./backend/Dockerfile .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${TAG_IMAGE}
           echo "La imagen ${{ env.IMAGE_NAME }} se subió correctamente a Docker Hub"
 
   update:
@@ -48,16 +50,17 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           git config user.name "${{ secrets.GIT_USER_NAME }}"
           git config user.email "${{ secrets.GIT_USER_EMAIL }}"
-          # git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
-          # git fetch
-          # git pull origin main
+          git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
+          git fetch
+          git pull origin main
 
       - name: Update Manifest
         run: |
-          echo ${{ env.TAG_IMAGE }}
+          TAG_IMAGE=$(cat tag_image.txt)
+          echo "TAG_IMAGE: ${TAG_IMAGE}"
           cd helm/pokemon-app/
-          sed -i "s/\(tag:\).*/\1 ${{ env.TAG_IMAGE }}/g" values.yaml
+          sed -i "s/\(tag:\).*/\1 ${TAG_IMAGE}/g" values.yaml
           cd ../..
           git add helm/pokemon-app/values.yaml
-          git commit -m "Update tag to ${{ env.TAG_IMAGE }}"
+          git commit -m "Update tag to ${TAG_IMAGE}"
           git push origin main
