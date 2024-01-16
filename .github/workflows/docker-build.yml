@@ -54,9 +54,9 @@ jobs:
 
       - name: Update Manifest
         run: |
+          echo ${{ env.TAG_IMAGE }}
           cd helm/pokemon-app/
-          sed -i "s/\(tag:\s*\).*/\1${{ env.TAG_IMAGE }}/g" values.yaml
-          cat values.yaml
+          sed -i "s/\(tag:\).*/\1 ${{ env.TAG_IMAGE }}/g" values.yaml
           cd ../..
           git add helm/pokemon-app/values.yaml
           git commit -m "Update tag to ${{ env.TAG_IMAGE }}"
