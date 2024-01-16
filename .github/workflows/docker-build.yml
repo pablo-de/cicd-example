@@ -41,29 +41,21 @@ jobs:
       - name: Setup SSH Key and Git Config
         run: |
           echo "Starting update manifest job"
-          sudo apt-get install -y git
           mkdir -p ~/.ssh
           echo "${{ secrets.GIT_SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_rsa
-          git config --global user.name "${{ secrets.GIT_USER_NAME }}" 
-          git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
-          git remote set-url origin git@github.com:pablo-de/cicd-example.git
-
-      - name: Clone Repository
-        run: |
-          git clone --single-branch --branch main git@github.com:pablo-de/cicd-example.git
-          cd cicd-example
-          git status
-          git log
+          git config user.name "${{ secrets.GIT_USER_NAME }}"
+          git config user.email "${{ secrets.GIT_USER_EMAIL }}"
+          git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
+          git fetch
+          git pull origin main
 
       - name: Update Manifest
         run: |
           cd helm/pokemon-app/
           sed -i "s/\(tag:\).*/\1 ${TAG_IMAGE}/g" values.yaml
-          # cat values.yaml
+          cat values.yaml
           cd ../..
-          git add .
-          git commit -m "update tag ${TAG_IMAGE}"
-          git push origin git@github.com:pablo-de/cicd-example.git
-
+          git add helm/pokemon-app/values.yaml
+          git commit -m "Update tag to ${TAG_IMAGE}"
+          git push origin main
