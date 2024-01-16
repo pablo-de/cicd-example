@@ -48,9 +48,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           git config user.name "${{ secrets.GIT_USER_NAME }}"
           git config user.email "${{ secrets.GIT_USER_EMAIL }}"
-          git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
-          git fetch
-          git pull origin main
+          # git remote set-url origin "${{ secrets.REPO_SSH_URL }}"
+          # git fetch
+          # git pull origin main
 
       - name: Update Manifest
         run: |
