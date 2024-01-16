@@ -62,3 +62,4 @@ jobs:
           git add .
           git commit -m "update tag ${{ env.IMAGE_NAME }}"
           git push origin git@github.com:pablo-de/cicd-example.git
+
