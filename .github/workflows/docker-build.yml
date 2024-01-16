@@ -55,10 +55,10 @@ jobs:
       - name: Update Manifest
         run: |
           cd helm/pokemon-app/
-          sed -i "s/\(tag:\).*/\1 ${{ env.IMAGE_NAME }}/g" values.yaml
+          sed -i "s/\(tag:\).*/\1 ${TAG_IMAGE}/g" values.yaml
           cat values.yaml
           cd ../..
           git add .
-          git commit -m "update tag ${{ env.IMAGE_NAME }}"
+          git commit -m "update tag ${TAG_IMAGE}"
           git push origin git@github.com:pablo-de/cicd-example.git
 
