@@ -20,7 +20,8 @@ jobs:
 
       - name: Set up Docker Build Matrix
         run: |
-          echo "TAG_IMAGE=${{ env.IMAGE_NAME }}_${{ github.run_id }}_${{ github.sha }}" >> $GITHUB_ENV
+          TAG_IMAGE=${{ env.IMAGE_NAME }}_${{ github.run_id }}_${{ github.sha }}
+          echo "TAG_IMAGE=${TAG_IMAGE}" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
