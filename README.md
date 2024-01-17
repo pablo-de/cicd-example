@@ -1,4 +1,4 @@
-# CI/CD Workflow for Backend
+# CI/CD Workflow
 
 Este repositorio presenta un flujo de trabajo CI/CD para construir, empaquetar y desplegar una aplicación backend utilizando GitHub Actions.
 
